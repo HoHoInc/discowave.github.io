@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiscoWave - Webhook Sender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DiscoWave Webhook Sender</h1>
+        <input type="text" id="webhookUrl" placeholder="Enter Webhook URL" />
+        <textarea id="message" rows="4" placeholder="Enter your message"></textarea>
+        <button onclick="sendMessage()">Send Message</button>
+        <p id="response"></p>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const webhookUrl = document.getElementById('webhookUrl').value;
+            const message = document.getElementById('message').value;
+            const responseElement = document.getElementById('response');
+
+            if (!webhookUrl || !message) {
+                responseElement.textContent = 'Please provide both the webhook URL and the message.';
+                return;
+            }
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseElement.textContent = 'Message sent successfully!';
+            })
+            .catch(error => {
+                responseElement.textContent = 'Error sending message.';
+            });
+        }
+    </script>
+</body>
+</html>
